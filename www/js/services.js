@@ -1,5 +1,12 @@
 angular.module('starter.services', [])
 
+.factory('Auth', function($firebaseAuth) {
+  var endPoint = 'https://ionicmobilechat.firebaseio.com/users';
+  var usersRef = new Firebase(endPoint);
+  return $firebaseAuth(usersRef);
+})
+
+
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 

@@ -1,30 +1,42 @@
 <ion-view view-title="Welcome to Trade Chat!">
   <ion-content class="padding">
-    <a class="button button-block button-large button-positive icon-right ion-chevron-down">
+    <a ng-click="showSignUpArea = !showSignUpArea" class="button button-block button-large button-positive icon-right ion-chevron-down">
       Not a member? Click here to sign up!
     </a>
-    <a class="button button-block button-large button-balanced icon-right ion-chevron-down">
-      Already a member? Sign in!
-    </a>
-    <div ng-if="!authData.github" class="list list-inset">
+    <div ng-show="showSignUpArea" class="list list-inset">
+      <p class="text-center">Enter your email and a new password below</p>
       <label class="item item-input">
-        <input type="email" placeholder="email" ng-model="email">
+        <input type="text" placeholder="email" ng-model="signUpEmail">
       </label>
       <label class="item item-input">
-        <input type="password" placeholder="password" ng-model="password">
+        <input type="password" placeholder="password" ng-model="signUpPassword">
       </label>
-      <button>Login</button>
-      <button class="button button-royal button-block icon ion-social-github" ng-click="login('github')"> Sign Up With Github</button>
-    </div>
-
-    <div ng-if="authData.github" class="list card">
-      <div class="item item-avatar">
-        <img ng-src="{{authData.github.cachedUserProfile.avatar_url}}" alt="">
-        <h2>{{authData.github.displayName}}</h2>
-        <p>{{authData.github.username}}</p>
-        <p>Github</p>
+      <button ng-click="signup('email', signUpEmail, signUpPassword)" class="button button-block button-positive">Sign Up</button>
+      <p class="text-center">--- or ---</p>
+      <div class="col text-center">
+        <button class="button button-royal icon ion-social-github" ng-click="signup('github')"> Sign Up With Github</button>
       </div>
     </div>
-    <button class="button button-assertive icon" ng-click="logout()"> Logout</button>
+
+    <a ng-click="showLoginArea = !showLoginArea" class="button button-block button-large button-balanced icon-right ion-chevron-down">
+      Already a member? Sign in!
+    </a>
+    <div ng-show="showLoginArea" class="list list-inset">
+      <p class="text-center">Enter your email and password below</p>
+      <label class="item item-input">
+        <input type="email" placeholder="email" ng-model="loginEmail">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="password" ng-model="loginPassword">
+      </label>
+      <button ng-click="login('email', loginEmail, loginPassword)" class="button button-block button-positive">Login</button>
+      <p class="text-center">--- or ---</p>
+      <div class="col text-center">
+        <button class="button button-royal icon ion-social-github" ng-click="login('github')"> Login With Github</button>
+      </div>
+    </div>
+
+    <p>{{message}} -- {{error}}</p>
+    <button ng-click="logout()">logout</button>
   </ion-content>
 </ion-view>
