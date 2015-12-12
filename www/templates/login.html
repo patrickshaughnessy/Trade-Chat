@@ -6,10 +6,10 @@
     <div ng-show="showSignUpArea" class="list list-inset">
       <p class="text-center">Enter your email and a new password below</p>
       <label class="item item-input">
-        <input type="text" placeholder="email" ng-model="signUpEmail">
+        <input type="text" placeholder="email" ng-model="signUpEmail" ng-change="updateVal('signUpEmail', signUpEmail)" >
       </label>
       <label class="item item-input">
-        <input type="password" placeholder="password" ng-model="signUpPassword">
+        <input type="password" placeholder="password" ng-model="signUpPassword" ng-change="updateVal('signUpPassword', signUpPassword)">
       </label>
       <button ng-click="signup('email', signUpEmail, signUpPassword)" class="button button-block button-positive">Sign Up</button>
       <p class="text-center">--- or ---</p>
@@ -24,10 +24,10 @@
     <div ng-show="showLoginArea" class="list list-inset">
       <p class="text-center">Enter your email and password below</p>
       <label class="item item-input">
-        <input type="email" placeholder="email" ng-model="loginEmail">
+        <input type="email" placeholder="email" ng-model="loginEmail" ng-change="updateVal('loginEmail', loginEmail)">
       </label>
       <label class="item item-input">
-        <input type="password" placeholder="password" ng-model="loginPassword">
+        <input type="password" placeholder="password" ng-model="loginPassword" ng-change="updateVal('loginPassword', loginPassword)">
       </label>
       <button ng-click="login('email', loginEmail, loginPassword)" class="button button-block button-positive">Login</button>
       <p class="text-center">--- or ---</p>
@@ -36,7 +36,6 @@
       </div>
     </div>
 
-    <p>{{message}} -- {{error}}</p>
     <button ng-click="logout()">logout</button>
   </ion-content>
 </ion-view>

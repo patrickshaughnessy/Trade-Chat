@@ -1,54 +1,81 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, $state, Auth) {
+.controller('LoginCtrl', function($scope, $state, Auth, $ionicPopup, $rootScope, $timeout) {
 
   var ref = new Firebase("https://ionicmobilechat.firebaseio.com");
 
   $scope.showSignUpArea = false;
   $scope.showLoginArea = false;
 
+  $scope.signUpEmail = '';
+  $scope.signUpPassword = '';
+  $scope.loginEmail = '';
+  $scope.loginPassword = '';
+
+
+  $scope.updateVal = function(inputField, value){
+    switch (inputField){
+      case 'signUpEmail':
+        $scope.signUpEmail = value;
+        break;
+      case 'signUpPassword':
+        $scope.signUpPassword = value;
+        break;
+      case 'loginEmail':
+        $scope.loginEmail = value;
+        break;
+      case 'loginPassword':
+        $scope.loginPassword = value;
+        break;
+      // case 'all':
+      //   $scope.signUpEmail = '';
+      //   $scope.signUpPassword = '';
+      //   $scope.loginEmail = '';
+      //   $scope.loginPassword = '';
+      //   break;
+    }
+  }
+
   $scope.signup = function(authMethod, signUpEmail, signUpPassword) {
-    $scope.message = null;
-    $scope.error = null;
+    console.log($scope.signUpEmail);
     switch(authMethod){
       case 'email':
         Auth.$createUser({
           email: signUpEmail,
           password: signUpPassword
         }).then(function(userData) {
-          $scope.message = "User created with uid: " + userData.uid;
           Auth.$authWithPassword({
             email    : signUpEmail,
             password : signUpPassword
           }, function(error, authData) {
             if (error) {
-              console.log("Login Failed!", error);
+              showAlert(error);
             } else {
               console.log("Authenticated successfully with payload:", authData);
             }
           });
         }).catch(function(error) {
-          $scope.error = error;
+          showAlert(error);
         });
         break;
       case 'github':
         Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
+          console.log('logged in');
         }).catch(function(error) {
           if (error.code === 'TRANSPORT_UNAVAILABLE') {
             Auth.$authWithOAuthPopup(authMethod).then(function(authData) {
+              console.log('logged in');
             });
           } else {
-            console.log(error);
+            showAlert(error)
           }
         });
         break;
     }
-
   };
 
   $scope.login = function(authMethod, loginEmail, loginPassword) {
-    $scope.message = null;
-    $scope.error = null;
+    console.log('here');
     switch(authMethod){
       case 'email':
         Auth.$authWithPassword({
@@ -56,7 +83,7 @@ angular.module('starter.controllers', [])
           password : loginPassword
         }, function(error, authData) {
           if (error) {
-            console.log("Login Failed!", error);
+            showAlert(error);
           } else {
             console.log("Authenticated successfully with payload:", authData);
           }
@@ -64,18 +91,21 @@ angular.module('starter.controllers', [])
         break;
       case 'github':
         Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
+          console.log('logged in')
         }).catch(function(error) {
           if (error.code === 'TRANSPORT_UNAVAILABLE') {
             Auth.$authWithOAuthPopup(authMethod).then(function(authData) {
+              console.log('logged in');
             });
           } else {
-            console.log(error);
+            showAlert(error);
           }
         });
         break;
       }
   };
 
+  // user is authorized - redirect to dashboard
   Auth.$onAuth(function(authData) {
     if (authData) {
       console.log("Logged in as:", authData);
@@ -98,6 +128,19 @@ angular.module('starter.controllers', [])
       console.log("Logged out");
     }
   });
+
+  // error handling
+  // An alert dialog
+  var showAlert = function(error) {
+    console.log(error, $scope.signUpEmail);
+    var alertPopup = $ionicPopup.alert({
+      title: 'Oops',
+      template: error
+    });
+    alertPopup.then(function(res) {
+      console.log(res);
+    });
+  };
 
 })
 
